@@ -1,12 +1,12 @@
-#define hall_sensorA_left 2      // Sensor Hall Effect untuk motor kiri
-#define hall_sensorA_right 3     // Sensor Hall Effect untuk motor kanan
-#define encoder_kal 2            // Faktor kalibrasi encoder
-#define PWM_left 6               // Pin PWM untuk motor kiri
-#define PWM_right 5              // Pin PWM untuk motor kanan
-#define in1_left 7               // Pin kontrol motor kiri
-#define in2_left 8               // Pin kontrol motor kiri
-#define in1_right 9              // Pin kontrol motor kanan
-#define in2_right 10             // Pin kontrol motor kanan
+#define sensorLeft A0  // Pin analog untuk sensor inframerah kiri
+#define sensorRight A1 // Pin analog untuk sensor inframerah kanan
+#define encoder_kal 2   // Faktor kalibrasi encoder
+#define PWM_left 6      // Pin PWM untuk motor kiri
+#define PWM_right 5     // Pin PWM untuk motor kanan
+#define in1_left 7      // Pin kontrol motor kiri
+#define in2_left 8      // Pin kontrol motor kiri
+#define in1_right 9     // Pin kontrol motor kanan
+#define in2_right 10    // Pin kontrol motor kanan
 
 int interval = 60;
 int motorSpeedLeft = 0;
@@ -33,8 +33,8 @@ int sumErrorRight = 0;
 void setup() {
   // Inisialisasi
   Serial.begin(9600);
-  pinMode(hall_sensorA_left, INPUT_PULLUP);
-  pinMode(hall_sensorA_right, INPUT_PULLUP);
+  pinMode(sensorLeft, INPUT);
+  pinMode(sensorRight, INPUT);
   pinMode(PWM_left, OUTPUT);
   pinMode(PWM_right, OUTPUT);
   pinMode(in1_left, OUTPUT);
@@ -47,8 +47,6 @@ void setup() {
   digitalWrite(in2_right, HIGH);
   encoderValueLeft = 0;
   encoderValueRight = 0;
-  attachInterrupt(digitalPinToInterrupt(hall_sensorA_left), updateEncoderLeft, RISING);
-  attachInterrupt(digitalPinToInterrupt(hall_sensorA_right), updateEncoderRight, RISING);
   previousMillis = millis();
 }
 
