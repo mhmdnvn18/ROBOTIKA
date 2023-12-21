@@ -19,9 +19,9 @@ void setup() {
 }
 
 void loop() {
-  int val1 = digitalRead(sensor1);
-  int val2 = digitalRead(sensor2);
-  int val3 = digitalRead(sensor3);
+  int val1 = analogRead(sensor1);
+  int val2 = analogRead(sensor2);
+  int val3 = analogRead(sensor3);
   Serial.print("Sensor 1 = ");
   Serial.println(val1);
   Serial.print("Sensor 2 = ");
