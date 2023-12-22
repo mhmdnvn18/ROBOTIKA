@@ -1,66 +1,62 @@
 #include <AFMotor.h>
 
-#define sensor1 A0
-#define sensor2 A1
-#define sensor3 A2
+AF_DCMotor M3(3); // KIRI
+AF_DCMotor M4(4); // KANAN
 
-AF_DCMotor motor3(3);
-AF_DCMotor motor4(4);
+int R_S = A1; // SENSOR KANAN
+int S_S = A2; // SENSOR TENGAH
+int L_S = A0; // SENSOR KIRI
 
 void setup() {
-  motor3.setSpeed(200);
-  motor4.setSpeed(200);
+  // put your setup code here, to run once:
+  pinMode(L_S, INPUT);
+  pinMode(S_S, INPUT);
+  pinMode(R_S, INPUT);
 
-  pinMode(sensor1, INPUT);
-  pinMode(sensor2, INPUT);
-  pinMode(sensor3, INPUT);
+  M3.setSpeed(250);
+  M4.setSpeed(250);
+
   Serial.begin(9600);
 }
 
 void loop() {
-  int value1 = digitalRead(sensor1);
-  int value2 = digitalRead(sensor2);
-  int value3 = digitalRead(sensor3);
-
-  Serial.print("Sensor 1: ");
-  Serial.print(value1);
-  Serial.print(" | Sensor 2: ");
-  Serial.print(value2);
-  Serial.print(" | Sensor 3: ");
-  Serial.println(value3);
-
-  // Implementasi logika kontrol motor sesuai dengan kondisi sensor
-  if (value1 == HIGH && value2 == LOW && value3 == HIGH) {
-    // Kasus maju
+  // put your main code here, to run repeatedly:
+  if ((digitalRead(L_S) == LOW) && (digitalRead(S_S) == HIGH) && (digitalRead(R_S) == LOW)) {
     forward();
-  } else if (value1 == HIGH && value2 == HIGH && value3 == LOW) {
-    // Kasus belok kanan
-    turnRight();
-  } else if (value1 == LOW && value2 == HIGH && value3 == HIGH) {
-    // Kasus belok kiri
+  } else if ((digitalRead(L_S) == HIGH) && (digitalRead(S_S) == HIGH) && (digitalRead(R_S) == HIGH)) {
+    forward();
+  } else if ((digitalRead(L_S) == HIGH) && (digitalRead(S_S) == HIGH) && (digitalRead(R_S) == LOW)) {
     turnLeft();
-  } else {
-    // Kasus berhenti
-    stopMotors();
+  } else if ((digitalRead(L_S) == HIGH) && (digitalRead(S_S) == LOW) && (digitalRead(R_S) == LOW)) {
+    turnLeft();
+  } else if ((digitalRead(L_S) == LOW) && (digitalRead(S_S) == HIGH) && (digitalRead(R_S) == HIGH)) {
+    turnRight();
+  } else if ((digitalRead(L_S) == LOW) && (digitalRead(S_S) == LOW) && (digitalRead(R_S) == HIGH)) {
+    turnRight();
   }
+
+  Serial.print(digitalRead(L_S));
+  Serial.print(digitalRead(R_S));
+  Serial.println(digitalRead(S_S));
 }
 
 void forward() {
-  motor3.run(FORWARD);
-  motor4.run(FORWARD);
+  M3.setSpeed(250);
+  M4.setSpeed(250);
+  M3.run(FORWARD);
+  M4.run(FORWARD);
 }
 
 void turnRight() {
-  motor3.run(FORWARD);
-  motor4.run(BACKWARD);
+  M3.setSpeed(250);
+  M4.setSpeed(50);
+  M3.run(FORWARD);
+  M4.run(BACKWARD);
 }
 
 void turnLeft() {
-  motor3.run(BACKWARD);
-  motor4.run(FORWARD);
-}
-
-void stopMotors() {
-  motor3.run(RELEASE);
-  motor4.run(RELEASE);
+  M3.setSpeed(50);
+  M4.setSpeed(250);
+  M3.run(BACKWARD);
+  M4.run(FORWARD);
 }
